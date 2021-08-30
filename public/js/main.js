@@ -4,7 +4,6 @@ const chatMessages = document.querySelector('.chat-messages');
 const chatForm = document.getElementById('chat-form');
 
 const roomName = document.getElementById('room-name');
-const userList = document.getElementById('users');
 
 const { username, room} = Qs.parse(location.search, {
     ignoreQueryPrefix: true
@@ -13,14 +12,14 @@ const { username, room} = Qs.parse(location.search, {
 socket.emit("joinRoom", {username, room})
 
 socket.on("message", (message) => {
-    outputMessage(message);
+    chatVM.outputMessage(message);
 
     chatMessages.scrollTop = chatMessages.scrollHeight
 })
 
 socket.on('roomUsers', ({room, users}) => {
     outputRoomName(room);
-    outputUsers(users);
+    usersListVM.outputUsers(users);
 })
 
 chatForm.addEventListener('submit', (e) => {
@@ -33,23 +32,30 @@ chatForm.addEventListener('submit', (e) => {
     e.target.elements.msg.focus();
 })
 
-function outputMessage(message){
-    const div = document.createElement('div');
-    div.classList.add('message');
-    div.innerHTML = `<p class="meta">${message.username}<span> ${message.time}</span></p>
-    <p class="text">
-        ${message.messageText}
-    </p>`;
-
-    document.querySelector('.chat-messages').appendChild(div);
-}
-
 function outputRoomName(room){
     roomName.innerText = room;
 }
 
-function outputUsers(users){
-    userList.innerHTML = `
-        ${users.map(user => `<li>${user.username}</li>`).join('')}
-    `
-}
+const chatVM = new Vue({
+    el: ".chat-messages",
+    data: {
+        messages: []
+    },
+    methods: {
+        outputMessage: function(message){
+            this.messages.push(message);
+        }
+    }
+})
+
+const usersListVM = new Vue({
+    el: "#users",
+    data: {
+        users: []
+    },
+    methods:{
+        outputUsers: function(users){
+            this.users = users;
+        }
+    }
+})
