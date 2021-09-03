@@ -19,7 +19,7 @@
 				<h1><i class="fas fa-smile"></i> ChatCord</h1>
 			</header>
 			<main class="join-main">
-				<form action="/users/login" method="post">
+				<form action="/users/register" method="post">
 					<div class="form-control">
 						<label for="username">Username</label>
 						<input
@@ -35,24 +35,21 @@
 							name="password"
 							id="password"
 							placeholder="Enter password..."
-							
+							required
 						/>
-						<a href="/register.html">Register Here</a>
+                        <label for="confirm-password">Confirm Password</label>
+						<input
+							type="password"
+							name="password2"
+							id="password2"
+							placeholder="Enter password..."
+							required
+						/>
 					</div>
-					<div class="form-control">
-						<label for="room">Room</label>
-						<select name="room" id="room">
-							<option value="JavaScript">JavaScript</option>
-							<option value="Python">Python</option>
-							<option value="PHP">PHP</option>
-							<option value="C#">C#</option>
-							<option value="Ruby">Ruby</option>
-							<option value="Java">Java</option>
-						</select>
-					</div>
-					<button type="submit" class="btn">Join Chat</button>
+					<button type="submit" class="btn">Register</button>
 				</form>
 			</main>
 		</div>
+        <script src="js/register.js"></script>
 	</body>
 </html>

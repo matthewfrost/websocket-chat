@@ -4,8 +4,9 @@ const http = require('http');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages');
 const {userJoin, getCurrentUser, userLeave, getRoomUsers} = require('./utils/users');
-
-
+const mongoose = require('mongoose');
+const passport = require('passport');
+const localStrategy = require('./config/passport')(passport);
 
 const app = express();
 const server = http.createServer(app);
@@ -52,12 +53,26 @@ io.on("connect", (socket) => {
     })
 });
 
-
-
+app.use(express.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, "public")))
+app.use(passport.initialize());
+app.use(passport.session());
+app.use("/users", require('./routes/users'))
 
 const port = 3000 || process.env.port
 
 server.listen(port, () => {
     console.log(`server running on port ${port}`);
+    mongoose.connect("mongodb://admin:Password@127.0.0.1:27017/socket-chat", { useNewUrlParser: true})
+})
+
+
+const db = mongoose.connection;
+
+db.on('error', (err) => {
+    console.log(err);
+})
+
+db.once("open", () => {
+    console.log("database open")
 })

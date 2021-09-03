@@ -1,3 +1,4 @@
+
 const users = [];
 
 function userJoin(id, username, room){
@@ -23,5 +24,7 @@ function getCurrentUser(id){
     if (currentUser) return currentUser;
     return null;
 }
+
+
 
 module.exports = {userJoin, getCurrentUser, userLeave, getRoomUsers}
